@@ -143,7 +143,7 @@ class SettingsTab(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         timeoutLabel = QtGui.QLabel(self.tr("Timeout:"))
-        self.timeoutEdit = QtGui.QLineEdit("1")
+        self.timeoutEdit = QtGui.QLineEdit("30")
 
         bonusLabel = QtGui.QLabel(self.tr("Bonusrounds:"))
         self.bonusEdit = QtGui.QLineEdit("6")
@@ -231,16 +231,15 @@ def main():
         system("echo " + sentence + " | festival --tts & ")
 
     def callback(genTab, drinkers, bar, settings, says):
-    #    say("Goaoaong")
         drink = choice(bar.contents())
         name = choice(drinkers.contents())
         sentence = choice(says.contents())
         ns = substitute(sentence, name, drink )
         genTab.say(ns)
-        say(ns)
         addRecord(record, name, drink)
         genTab.updateRecord(record)
-    #    say("Drink drink. Drink drink")
+
+        say( "Goaoaong. " + ns + ". Drink drink. Drink drink.")
 
     drinkingBot = DrinkingBot(callback)
 

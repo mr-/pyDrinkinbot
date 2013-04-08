@@ -1,8 +1,10 @@
-A graphical version of the infamous Drinkinbot!
+#pyDrinkinbot
+
+##A graphical version of the infamous Drinkinbot!
 
 Requires PySide and festival.
 
-TODO:
+##TODO:
  - Bonusrounds
  - More balanced drinkers-choice
  - Need to fade music?

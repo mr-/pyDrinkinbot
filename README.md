@@ -5,9 +5,9 @@ By popular demand!
 
 It's back! 
 
-Now with Graphical User Interface! 
+Now with **Graphical** User Interface! 
 
-and many more cool features!
+And many more Cool Features(TM)!
 
 But look for yourself..
 
@@ -17,7 +17,7 @@ But look for yourself..
 ##Requirements
 Python, PySide and festival.
 
-And something to pause music from commandline. (e.g. rhythmbox-client)
+Optinally something to pause music from commandline. (e.g. rhythmbox-client)
 
 ##TODO:
  - More balanced drinkers-choice

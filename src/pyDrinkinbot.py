@@ -6,16 +6,16 @@ from DrinkingBotGUI import runBot
 def main():
     runBot(sys.argv, botAction)
 
-def botAction(genTab, drinkers, bar, settings, says):
-    genTab.clear()
+def botAction(playTab, drinkers, bar, settings, says):
+    playTab.clear()
 
     sayStack = ["Goaoaong."]
     
     if (isBonusRound(settings)):
         sayStack += ["Bonusround Bonusround!"] 
-        sayStack += [doOnce(genTab, drinkers, bar, settings, says) for x in [1,2,3]]
+        sayStack += [doOnce(playTab, drinkers, bar, settings, says) for x in [1,2,3]]
     else:
-        sayStack += [doOnce(genTab, drinkers, bar, settings, says)]
+        sayStack += [doOnce(playTab, drinkers, bar, settings, says)]
 
     sayStack += [ "Drink drink. Drink drink." ]
     if not( settings.quiet() ):
@@ -25,7 +25,7 @@ def botAction(genTab, drinkers, bar, settings, says):
 def isBonusRound(settings):
     return (choice(range(0, int(1/settings.bonusrounds()) )) == 0)
 
-def doOnce(genTab, drinkers, bar, settings, says):
+def doOnce(playTab, drinkers, bar, settings, says):
     sentence = choice(says.contents())
 
     drink = choice(bar.contents())
@@ -34,9 +34,9 @@ def doOnce(genTab, drinkers, bar, settings, says):
 
     if requiresAction(sentence):
         addRecord(record, name, drink)
-        genTab.updateRecord(record)
+        playTab.updateRecord(record)
 
-    genTab.sayMore(substSentence)
+    playTab.sayMore(substSentence)
     return substSentence
 
 def requiresAction(sentence):

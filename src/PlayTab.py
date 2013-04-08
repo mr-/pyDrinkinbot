@@ -45,9 +45,10 @@ class PlayTab(QtGui.QWidget):
         editor.setFont(font)
         editor.setFixedHeight(23*15)
         return editor
+    
 
-    paused = False
-    counter = 1
+    sayCounter = 1
+
     def clear(self):
         self.sayLabel.clear()
         self.counter = 1
@@ -55,9 +56,18 @@ class PlayTab(QtGui.QWidget):
     def sayMore(self, txt):
         self.sayLabel.setPlainText(str(self.counter) + ". " + txt + "\n\n" + self.sayLabel.toPlainText())
         self.counter += 1 
+
     def say(self, txt):
         self.sayLabel.setPlainText(txt)
 
+    def tick(self):
+        self.digit.display(self.digit.intValue() + 1)
+
+    def gameRound(self):
+        return self.digit.intValue()
+
+
+    paused = False
 
     def pressedStart(self):
         self.paused = False
@@ -78,8 +88,7 @@ class PlayTab(QtGui.QWidget):
             if not self.paused:
                 time = self.settings.timeout()
                 QtCore.QTimer.singleShot(10*int(time), self.advance)
-    def tick(self):
-        self.digit.display(self.digit.intValue() + 1)
+
 
     def __init__(self, drinkers, bar, settings, says, callback, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -119,108 +128,4 @@ class PlayTab(QtGui.QWidget):
         mainLayout.addStretch(1)
         self.setLayout(mainLayout)
 
-
-class SettingsTab(QtGui.QWidget):
-
-    def bonusrounds(self):
-
-        def convert(s):
-            try:
-                return float(s)
-            except ValueError:
-                num, denom = s.split('/')
-                return float(num) / float(denom)
-
-        return convert(self.bonusEdit.text())
-
-    def timeout(self):
-        return int(self.timeoutEdit.text())
-
-    def fadeCommand(self):
-        return self.fadeEdit.text()
-
-    def quiet(self):
-        return self.quietBox.isChecked()
-
-    def __init__(self,  parent=None):
-        QtGui.QWidget.__init__(self, parent)
-
-        timeoutLabel = QtGui.QLabel(self.tr("Time to action in seconds:"))
-        self.timeoutEdit = QtGui.QLineEdit("30")
-        self.timeoutEdit.setFixedWidth(40)
-
-
-        bonusLabel = QtGui.QLabel(self.tr("Probability for Bonusround:"))
-        self.bonusEdit = QtGui.QLineEdit("1/6")
-        self.bonusEdit.setFixedWidth(40)
-
-        fadeLabel = QtGui.QLabel(self.tr("Command to pause music:"))
-        self.fadeEdit = QtGui.QLineEdit("rhythmbox-client --play-pause")
-        fadeLayout = QtGui.QHBoxLayout()
-        fadeLayout.addWidget(fadeLabel)
-        fadeLayout.addWidget(self.fadeEdit)
-        #self.fadeEdit.setFixedWidth(40)
-
-        self.quietBox = QtGui.QCheckBox("Quiet")
-        timeoutLayout = QtGui.QHBoxLayout()
-        timeoutLayout.addWidget(timeoutLabel)
-        timeoutLayout.addWidget(self.timeoutEdit)
-
-        bonusLayout = QtGui.QHBoxLayout()
-        bonusLayout.addWidget(bonusLabel)
-        bonusLayout.addWidget(self.bonusEdit)
-
-        mainLayout = QtGui.QVBoxLayout()
-        mainLayout.addLayout(timeoutLayout)
-        mainLayout.addLayout(bonusLayout)
-        mainLayout.addLayout(fadeLayout)
-        mainLayout.addWidget(self.quietBox)
-        mainLayout.addStretch(1)
-        self.setLayout(mainLayout)
-
-class EditorTab(QtGui.QWidget):
-
-    def contents(self):
-        l = self.editor.toPlainText().splitlines(True)
-        return [x.rstrip('\n') for x in l]
-
-    def pressedSave(self):
-        f = open(self.file, "w")
-        f.write(self.editor.toPlainText())
-
-    def __init__(self, fileName, parent=None):
-        QtGui.QWidget.__init__(self, parent)
-
-        self.file = fileName
-        self.setupEditor()
-        saveButton = QtGui.QPushButton(self.tr("Save"))
-        cancelButton = QtGui.QPushButton(self.tr("Cancel"))
-
-        saveButton.clicked.connect(self.pressedSave)
-
-        buttonLayout = QtGui.QHBoxLayout()
-        buttonLayout.addStretch(1)
-        buttonLayout.addWidget(saveButton)
-        buttonLayout.addWidget(cancelButton)
-
-        mainLayout = QtGui.QVBoxLayout()
-        mainLayout.addWidget(self.editor)
-        mainLayout.addLayout(buttonLayout)
-
-        self.setLayout(mainLayout)
-
-
-
-    def setupEditor(self):
-        font = QtGui.QFont()
-        font.setFamily("Courier")
-        font.setFixedPitch(True)
-        font.setPointSize(10)
-
-        self.editor = QtGui.QTextEdit()
-        self.editor.acceptRichText = False
-        self.editor.setFont(font)
-        f = open(self.file, "r")
-        
-        self.editor.setPlainText(f.read())
 

@@ -34,7 +34,7 @@ class DrinkingBot(QtGui.QDialog):
         mainLayout = QtGui.QVBoxLayout()
         mainLayout.addWidget(tabWidget)
         self.setLayout(mainLayout)
-        self.resize(500, 600)
+        self.resize(700, 700)
         self.setWindowTitle(self.tr("pyDrinkinbot"))
 
 
@@ -75,14 +75,21 @@ class GeneralTab(QtGui.QWidget):
         font.setFamily("Courier")
         font.setFixedPitch(True)
         font.setPointSize(14)
-
         editor = QtGui.QTextEdit()
         editor.acceptRichText = False
         editor.setFont(font)
+        editor.setFixedHeight(23*15)
         return editor
 
     paused = False
+    counter = 1
+    def clear(self):
+        self.sayLabel.clear()
+        self.counter = 1
 
+    def sayMore(self, txt):
+        self.sayLabel.setPlainText(str(self.counter) + ". " + txt + "\n\n" + self.sayLabel.toPlainText())
+        self.counter += 1 
     def say(self, txt):
         self.sayLabel.setPlainText(txt)
 
@@ -98,14 +105,16 @@ class GeneralTab(QtGui.QWidget):
         try:
             if self.timer.value() == 100:
                 self.timer.setValue(0)
+                self.tick()
                 self.callback(self, self.drinkers, self.bar, self.settings, self.says)
-
             if not self.paused:
                 self.timer.setValue(self.timer.value() + 1)
         finally:
             if not self.paused:
                 time = self.settings.timeout()
                 QtCore.QTimer.singleShot(10*int(time), self.advance)
+    def tick(self):
+        self.digit.display(self.digit.intValue() + 1)
 
     def __init__(self, drinkers, bar, settings, says, callback, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -120,9 +129,12 @@ class GeneralTab(QtGui.QWidget):
 
         self.sayLabel = self.setupEditor()
         self.tree = QtGui.QTreeWidget()
+        self.tree.setFixedHeight(20*13)
         self.tree.setHeaderLabels(["Drinkers", "Drink", "Consumed"])
 
         self.timer = QtGui.QProgressBar()
+        self.digit = QtGui.QLCDNumber(2)
+
         startButton.clicked.connect(self.pressedStart)
         pauseButton.clicked.connect(self.pressedPause)
 
@@ -130,8 +142,12 @@ class GeneralTab(QtGui.QWidget):
         buttonLayout.addWidget(startButton)
         buttonLayout.addWidget(pauseButton)
 
+        timerLayout = QtGui.QHBoxLayout()
+        timerLayout.addWidget(self.timer)
+        timerLayout.addWidget(self.digit)
+
         mainLayout = QtGui.QVBoxLayout()
-        mainLayout.addWidget(self.timer)
+        mainLayout.addLayout(timerLayout)
         mainLayout.addLayout(buttonLayout)
         mainLayout.addWidget(self.sayLabel)
         mainLayout.addWidget(self.tree)
@@ -142,10 +158,10 @@ class GeneralTab(QtGui.QWidget):
 class SettingsTab(QtGui.QWidget):
 
     def bonusrounds(self):
-        return self.bonusEdit.text()
+        return int(self.bonusEdit.text())
 
     def timeout(self):
-        return self.timeoutEdit.text()
+        return int(self.timeoutEdit.text())
 
     def __init__(self,  parent=None):
         QtGui.QWidget.__init__(self, parent)

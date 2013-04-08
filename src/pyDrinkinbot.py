@@ -7,14 +7,38 @@ def main():
     runBot(sys.argv, botAction)
 
 def botAction(genTab, drinkers, bar, settings, says):
-    drink = choice(bar.contents())
-    name = choice(drinkers.contents())
+    genTab.clear()
+    sayStack = ["Goaoaong."]
+    
+    if (isBonusRound(settings)):
+        sayStack += ["Bonusround Bonusround!"] 
+        sayStack += [doOnce(genTab, drinkers, bar, settings, says) for x in [1,2,3]]
+    else:
+        sayStack += [doOnce(genTab, drinkers, bar, settings, says)]
+
+    sayStack += [ "Drink drink. Drink drink." ]
+    say( ". ".join(sayStack) )
+
+
+def isBonusRound(settings):
+    return (choice(range(0, settings.bonusrounds())) == 0)
+
+def doOnce(genTab, drinkers, bar, settings, says):
     sentence = choice(says.contents())
-    ns = substitute(sentence, name, drink )
-    genTab.say(ns)
-    addRecord(record, name, drink)
-    genTab.updateRecord(record)
-    say( "Goaoaong. " + ns + ". Drink drink. Drink drink.")
+
+    if requiresAction(sentence):
+        drink = choice(bar.contents())
+        name = choice(drinkers.contents())
+        sentence = substitute(sentence, name, drink )
+        addRecord(record, name, drink)
+        genTab.updateRecord(record)
+
+    genTab.sayMore(sentence)
+    return sentence
+
+def requiresAction(sentence):
+    return "NAME" in sentence and "DRINK" in sentence
+
 
 def substitute(s1, name, drink):
     s2 = s1.replace("NAME", name)

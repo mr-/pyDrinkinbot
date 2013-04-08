@@ -8,6 +8,7 @@ def main():
 
 def botAction(genTab, drinkers, bar, settings, says):
     genTab.clear()
+
     sayStack = ["Goaoaong."]
     
     if (isBonusRound(settings)):
@@ -17,24 +18,26 @@ def botAction(genTab, drinkers, bar, settings, says):
         sayStack += [doOnce(genTab, drinkers, bar, settings, says)]
 
     sayStack += [ "Drink drink. Drink drink." ]
-    say( ". ".join(sayStack) )
+    if not( settings.quiet() ):
+        say( ". ".join(sayStack) )
 
 
 def isBonusRound(settings):
-    return (choice(range(0, settings.bonusrounds())) == 0)
+    return (choice(range(0, int(1/settings.bonusrounds()) )) == 0)
 
 def doOnce(genTab, drinkers, bar, settings, says):
     sentence = choice(says.contents())
 
+    drink = choice(bar.contents())
+    name = choice(drinkers.contents())
+    substSentence = substitute(sentence, name, drink )
+
     if requiresAction(sentence):
-        drink = choice(bar.contents())
-        name = choice(drinkers.contents())
-        sentence = substitute(sentence, name, drink )
         addRecord(record, name, drink)
         genTab.updateRecord(record)
 
-    genTab.sayMore(sentence)
-    return sentence
+    genTab.sayMore(substSentence)
+    return substSentence
 
 def requiresAction(sentence):
     return "NAME" in sentence and "DRINK" in sentence

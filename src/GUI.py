@@ -158,25 +158,48 @@ class GeneralTab(QtGui.QWidget):
 class SettingsTab(QtGui.QWidget):
 
     def bonusrounds(self):
-        return int(self.bonusEdit.text())
+
+        def convert(s):
+            try:
+                return float(s)
+            except ValueError:
+                num, denom = s.split('/')
+                return float(num) / float(denom)
+
+        return convert(self.bonusEdit.text())
 
     def timeout(self):
         return int(self.timeoutEdit.text())
 
+    def quiet(self):
+        return self.quietBox.isChecked()
+
     def __init__(self,  parent=None):
         QtGui.QWidget.__init__(self, parent)
 
-        timeoutLabel = QtGui.QLabel(self.tr("Timeout:"))
+        timeoutLabel = QtGui.QLabel(self.tr("Time to action in seconds:"))
         self.timeoutEdit = QtGui.QLineEdit("30")
+        self.timeoutEdit.setFixedWidth(40)
 
-        bonusLabel = QtGui.QLabel(self.tr("Bonusrounds:"))
-        self.bonusEdit = QtGui.QLineEdit("6")
+
+        bonusLabel = QtGui.QLabel(self.tr("Probability for Bonusround:"))
+        self.bonusEdit = QtGui.QLineEdit("1/6")
+        self.bonusEdit.setFixedWidth(40)
+
+        self.quietBox = QtGui.QCheckBox("Quiet")
+
+        timeoutLayout = QtGui.QHBoxLayout()
+        timeoutLayout.addWidget(timeoutLabel)
+        timeoutLayout.addWidget(self.timeoutEdit)
+
+        bonusLayout = QtGui.QHBoxLayout()
+        bonusLayout.addWidget(bonusLabel)
+        bonusLayout.addWidget(self.bonusEdit)
 
         mainLayout = QtGui.QVBoxLayout()
-        mainLayout.addWidget(timeoutLabel)
-        mainLayout.addWidget(self.timeoutEdit)
-        mainLayout.addWidget(bonusLabel)
-        mainLayout.addWidget(self.bonusEdit)
+        mainLayout.addLayout(timeoutLayout)
+        mainLayout.addLayout(bonusLayout)
+        mainLayout.addWidget(self.quietBox)
         mainLayout.addStretch(1)
         self.setLayout(mainLayout)
 

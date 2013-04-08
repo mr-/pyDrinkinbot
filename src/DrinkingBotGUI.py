@@ -20,7 +20,10 @@ class DrinkingBot(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
 
         drinkers = EditorTab(drinkersFile)
+        drinkers.setToolTip('To increase the chances for a certain drinker, just add them to the list multiple times')
+
         bar = EditorTab(barFile)
+        bar.setToolTip('To increase the chances for a certain drink, just add it to the list multiple times')
         says = EditorTab(saysFile)
         settings = SettingsTab()
 

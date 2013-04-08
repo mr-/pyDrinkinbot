@@ -64,7 +64,7 @@ def addRecord(record, name, drink):
         record[name].append((ele[0], ele[1]+1))
 
 def say(fc, sentence):
-    system(fc + " && echo \"" + sentence + "\" | festival --tts && " + fc + " & ")
+    system("(" + fc + "; echo \"" + sentence + "\" | festival --tts; " + fc + ") & ")
 
 
 

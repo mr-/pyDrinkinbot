@@ -19,7 +19,7 @@ def botAction(genTab, drinkers, bar, settings, says):
 
     sayStack += [ "Drink drink. Drink drink." ]
     if not( settings.quiet() ):
-        say( ". ".join(sayStack) )
+        say(settings.fadeCommand(), ". ".join(sayStack) )
 
 
 def isBonusRound(settings):
@@ -63,8 +63,8 @@ def addRecord(record, name, drink):
         record[name].remove(ele)
         record[name].append((ele[0], ele[1]+1))
 
-def say(sentence):
-    system("echo " + sentence + " | festival --tts & ")
+def say(fc, sentence):
+    system(fc + " && echo \"" + sentence + "\" | festival --tts && " + fc + " & ")
 
 
 

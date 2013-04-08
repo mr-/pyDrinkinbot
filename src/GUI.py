@@ -171,6 +171,9 @@ class SettingsTab(QtGui.QWidget):
     def timeout(self):
         return int(self.timeoutEdit.text())
 
+    def fadeCommand(self):
+        return self.fadeEdit.text()
+
     def quiet(self):
         return self.quietBox.isChecked()
 
@@ -186,8 +189,14 @@ class SettingsTab(QtGui.QWidget):
         self.bonusEdit = QtGui.QLineEdit("1/6")
         self.bonusEdit.setFixedWidth(40)
 
-        self.quietBox = QtGui.QCheckBox("Quiet")
+        fadeLabel = QtGui.QLabel(self.tr("Command to pause music:"))
+        self.fadeEdit = QtGui.QLineEdit("rhythmbox-client --play-pause")
+        fadeLayout = QtGui.QHBoxLayout()
+        fadeLayout.addWidget(fadeLabel)
+        fadeLayout.addWidget(self.fadeEdit)
+        #self.fadeEdit.setFixedWidth(40)
 
+        self.quietBox = QtGui.QCheckBox("Quiet")
         timeoutLayout = QtGui.QHBoxLayout()
         timeoutLayout.addWidget(timeoutLabel)
         timeoutLayout.addWidget(self.timeoutEdit)
@@ -199,6 +208,7 @@ class SettingsTab(QtGui.QWidget):
         mainLayout = QtGui.QVBoxLayout()
         mainLayout.addLayout(timeoutLayout)
         mainLayout.addLayout(bonusLayout)
+        mainLayout.addLayout(fadeLayout)
         mainLayout.addWidget(self.quietBox)
         mainLayout.addStretch(1)
         self.setLayout(mainLayout)

@@ -1,7 +1,7 @@
 import sys
 from random import choice
 from os import system
-from GUI import runBot
+from DrinkingBotGUI import runBot
 
 def main():
     runBot(sys.argv, botAction)

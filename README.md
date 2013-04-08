@@ -6,7 +6,6 @@ Requires PySide and festival.
 
 ##TODO:
  - More balanced drinkers-choice
- - Need to fade music?
  - The settings Tab is superugly..
 
 Best voice yet: voice_cmu_us_jmk_arctic_clunits

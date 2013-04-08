@@ -42,7 +42,6 @@ def doOnce(genTab, drinkers, bar, settings, says):
 def requiresAction(sentence):
     return "NAME" in sentence and "DRINK" in sentence
 
-
 def substitute(s1, name, drink):
     s2 = s1.replace("NAME", name)
     s3 = s2.replace("DRINK", drink)

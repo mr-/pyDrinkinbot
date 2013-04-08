@@ -34,18 +34,18 @@ class PlayTab(QtGui.QWidget):
         self.data_to_tree(root, record)
         for i in range(0,int(root.childCount())):
             self.tree.expandItem(root.child(i))
+        self.updateTotals(record)
 
-    def setupEditor(self):
-        font = QtGui.QFont()
-        font.setFamily("Courier")
-        font.setFixedPitch(True)
-        font.setPointSize(14)
-        editor = QtGui.QTextEdit()
-        editor.acceptRichText = False
-        editor.setFont(font)
-        editor.setFixedHeight(23*15)
-        return editor
-    
+    def updateTotals(self, record):
+        s = ""
+        for name in sorted(self.drinkers.contents()):
+            s += name + "\t" + self.totalFromRec(record, name) + "\n"
+        self.totals.setPlainText(s)
+
+    def totalFromRec(self,record,name):
+        if not name in record.keys(): return str(0)
+        return str(sum( [x[1] for x in record[name]]))
+
 
     sayCounter = 1
 
@@ -59,6 +59,7 @@ class PlayTab(QtGui.QWidget):
 
     def say(self, txt):
         self.sayLabel.setPlainText(txt)
+
 
     def tick(self):
         self.digit.display(self.digit.intValue() + 1)
@@ -101,10 +102,16 @@ class PlayTab(QtGui.QWidget):
         startButton = QtGui.QPushButton(self.tr("Start"))
         pauseButton = QtGui.QPushButton(self.tr("Pause"))
 
-        self.sayLabel = self.setupEditor()
+        self.sayLabel = self.setupEditor(14)
+
+        self.totals = self.setupEditor(12)
         self.tree = QtGui.QTreeWidget()
         self.tree.setFixedHeight(20*13)
         self.tree.setHeaderLabels(["Drinkers", "Drink", "Consumed"])
+
+        statsLayout = QtGui.QHBoxLayout()
+        statsLayout.addWidget(self.tree)
+        statsLayout.addWidget(self.totals)
 
         self.timer = QtGui.QProgressBar()
         self.digit = QtGui.QLCDNumber(2)
@@ -124,8 +131,17 @@ class PlayTab(QtGui.QWidget):
         mainLayout.addLayout(timerLayout)
         mainLayout.addLayout(buttonLayout)
         mainLayout.addWidget(self.sayLabel)
-        mainLayout.addWidget(self.tree)
+        mainLayout.addLayout(statsLayout)
         mainLayout.addStretch(1)
         self.setLayout(mainLayout)
 
-
+    def setupEditor(self, lines):
+        font = QtGui.QFont()
+        font.setFamily("Courier")
+        font.setFixedPitch(True)
+        font.setPointSize(14)
+        editor = QtGui.QTextEdit()
+        editor.acceptRichText = False
+        editor.setFont(font)
+        editor.setFixedHeight(23*lines)
+        return editor

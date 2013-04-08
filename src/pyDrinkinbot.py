@@ -4,14 +4,9 @@ from os import system
 from GUI import runBot
 
 def main():
-    runBot(sys.argv, callback)
+    runBot(sys.argv, botAction)
 
-def substitute(s1, name, drink):
-    s2 = s1.replace("NAME", name)
-    s3 = s2.replace("DRINK", drink)
-    return s3
-
-def callback(genTab, drinkers, bar, settings, says):
+def botAction(genTab, drinkers, bar, settings, says):
     drink = choice(bar.contents())
     name = choice(drinkers.contents())
     sentence = choice(says.contents())
@@ -21,8 +16,10 @@ def callback(genTab, drinkers, bar, settings, says):
     genTab.updateRecord(record)
     say( "Goaoaong. " + ns + ". Drink drink. Drink drink.")
 
-
-
+def substitute(s1, name, drink):
+    s2 = s1.replace("NAME", name)
+    s3 = s2.replace("DRINK", drink)
+    return s3
 
 record = {}
 #        record = {

@@ -3,13 +3,21 @@ from PySide import QtCore, QtGui
 from random import choice
 from os import system
 
+def runBot(argv, callback, drinkersFile = "../data/drinkers", 
+                           barFile="../data/bar", 
+                           saysFile="../data/says"):
+    app = QtGui.QApplication(argv)
+    drinkingBot = DrinkingBot(callback, drinkersFile, barFile, saysFile)
+    sys.exit(drinkingBot.exec_())
+
+
 class DrinkingBot(QtGui.QDialog):
-    def __init__(self, callback, parent=None):
+    def __init__(self, callback, drinkersFile, barFile, saysFile, parent=None):
         QtGui.QDialog.__init__(self, parent)
 
-        drinkers = EditorTab("../data/drinkers")
-        bar = EditorTab("../data/bar")
-        says = EditorTab("../data/says")
+        drinkers = EditorTab(drinkersFile)
+        bar = EditorTab(barFile)
+        says = EditorTab(saysFile)
         settings = SettingsTab()
 
 
@@ -201,8 +209,4 @@ class EditorTab(QtGui.QWidget):
         f = open(self.file, "r")
         
         self.editor.setPlainText(f.read())
-        
-def runBot(argv, callback):
-    app = QtGui.QApplication(argv)
-    drinkingBot = DrinkingBot(callback)
-    sys.exit(drinkingBot.exec_())
+

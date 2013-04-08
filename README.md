@@ -1,6 +1,8 @@
 #pyDrinkinbot
 
 ##A graphical version of the infamous Drinkinbot!
+(To start it, go to src and run "python pyDrinkinbot.py)
+
 By popular demand! 
 
 It's back! 

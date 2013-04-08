@@ -37,7 +37,7 @@ class SettingsTab(QtGui.QWidget):
         self.bonusEdit = QtGui.QLineEdit("1/6")
         self.bonusEdit.setFixedWidth(40)
 
-        fadeLabel = QtGui.QLabel(self.tr("Command to pause music:"))
+        fadeLabel = QtGui.QLabel(self.tr("Command to pause music: (use : for nothing)"))
         self.fadeEdit = QtGui.QLineEdit("rhythmbox-client --play-pause")
         fadeLayout = QtGui.QHBoxLayout()
         fadeLayout.addWidget(fadeLabel)

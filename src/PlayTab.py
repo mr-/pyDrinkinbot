@@ -39,7 +39,7 @@ class PlayTab(QtGui.QWidget):
     def updateTotals(self, record):
         s = ""
         for name in sorted(self.drinkers.contents()):
-            s += name + "\t" + self.totalFromRec(record, name) + "\n"
+            s += "" +name + "\t" + self.totalFromRec(record, name) + "\n"
         self.totals.setPlainText(s)
 
     def totalFromRec(self,record,name):
@@ -141,7 +141,7 @@ class PlayTab(QtGui.QWidget):
         font.setFixedPitch(True)
         font.setPointSize(14)
         editor = QtGui.QTextEdit()
-        editor.acceptRichText = False
+        editor.acceptRichText = True
         editor.setFont(font)
         editor.setFixedHeight(23*lines)
         return editor

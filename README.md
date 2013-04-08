@@ -19,10 +19,11 @@ But look for yourself..
 ##Requirements
 Python, PySide and festival.
 
-Optinally something to pause music from commandline. (e.g. rhythmbox-client)
+Optionally something to pause music from commandline. (e.g. rhythmbox-client)
 
 ##TODO:
- - More balanced drinkers-choice
+ - Better drinkers-chooser. completely random is uncool.
+    Don't know how good the current one is..
  - with --play-pause rhythmbox has to play before the bot starts.
     Bad?
  - The settings Tab is superugly:

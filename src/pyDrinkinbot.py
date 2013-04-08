@@ -1,5 +1,6 @@
 import sys
 from random import choice
+from random import sample
 from os import system
 from DrinkingBotGUI import runBot
 
@@ -20,7 +21,7 @@ def botAction(playTab, drinkers, bar, settings, says):
     sayStack += [ "Drink drink. Drink drink." ]
 
     if not( settings.quiet() ):
-        say(settings.fadeCommand(), ". ".join(sayStack) )
+        say(settings.pauseCommand(), ". ".join(sayStack), settings.playCommand() )
 
 
 def isBonusRound(settings):
@@ -42,12 +43,13 @@ def doOnce(playTab, drinkers, bar, settings, says):
     return substSentence
 
 
-def say(fc, sentence):
-    system("(" + fc + "; echo \"" + sentence + "\" | festival --tts; " + fc + ") & ")
+def say(pause, sentence, play):
+    system("(" + pause + "; echo \"" + sentence + "\" | festival --tts; " + play + ") & ")
 
 
 def choose(hist, drinkers):
-    return chooseFromHist(hist, drinkers, 3)
+ #   return choice(drinkers)
+    return chooseFromHist(hist, sample(drinkers, len(drinkers)), 4)
 
 
 def requiresAction(sentence):
@@ -78,16 +80,17 @@ def addRecord(record, name, drink):
 
 def chooseFromHist(hist,drinkers,n):
     truncHist = [(name, weightedDrinksInLastRounds(hist,name,n)) for name in drinkers]
+    m = min([x[1] for x in truncHist])
+    truncHist = [(x[0], x[1]-m) for x in truncHist]
     weightedSum = sum([x[1] for x in truncHist])
-    picked = choice(range(0,weightedSum+1))
 
+    picked = choice(range(0,int(weightedSum+1)))
     i = 0
     tmp = truncHist[i][1]
 
     while (picked > tmp and i < (len(drinkers)-1)):
         i += 1
         tmp = tmp + truncHist[i][1]
-
     return truncHist[i][0]
 
 def weightedDrinksInLastRounds(hist, name, n):
